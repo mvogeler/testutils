@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'testutils'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.commons:commons-lang3'
+    compile 'junit:junit:4.12'
+}
