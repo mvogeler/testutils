@@ -96,7 +96,7 @@ public class StringGetterSetterTester {
                 try {
                     assertGetterSetter(objectUnderTest, fieldName, testNulls, nullable);
                 } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ex) {
-                    continue;
+                    fail("Error invoking getters and setters for " + fieldName);
                 }
             }
         }
@@ -115,9 +115,15 @@ public class StringGetterSetterTester {
 
         if (testNulls) {
             if (!nullable) {
-                setter.invoke(objectUnderTest, (String) null);
-                fail("NPE not thrown for set" + capitalizedField);
-
+                try {
+                    setter.invoke(objectUnderTest, (String) null);
+                    fail("NPE not thrown for set" + capitalizedField);
+                } catch (InvocationTargetException ex) {
+                    if (ex.getCause() instanceof NullPointerException) {
+                        return;
+                    }
+                    throw ex;
+                }
             } else {
                 setter.invoke(objectUnderTest, (String) null);
                 assertNull(fieldName + " couldn't be set and get as null", getter.invoke(objectUnderTest));
